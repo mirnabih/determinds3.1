@@ -12,8 +12,8 @@ export class ArticlesService {
     });
   }
 
-  async findAll() {
-    return this.databaseService.article.findMany({});
+  async findAll({ limit, skip }: { limit?: number, skip?: number }) {
+    return this.databaseService.article.findMany({ take: limit ?? undefined, skip: skip ?? undefined, orderBy: { createdAt: 'asc' } });
   }
 
   async findOne(id: number) {

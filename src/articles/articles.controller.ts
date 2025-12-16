@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ArticlesService } from './articles.service.js';
 import { Prisma } from '../../generated/prisma/client.js';
 
@@ -12,8 +12,8 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
+  findAll(@Query('limit') limit?: string, @Query('skip') skip?: string) {
+    return this.articlesService.findAll({ limit: limit ? +limit : undefined, skip: skip ? +skip : undefined });
   }
 
   @Get(':id')
