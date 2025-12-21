@@ -18,6 +18,12 @@ model Article {
   id Int @default(autoincrement()) @id
   title String @unique
   description String
+  type ArticleType @default(LONG)
   createdAt DateTime @default(now())
   modifiedAt DateTime @updatedAt
+}
+
+enum ArticleType {
+  LONG
+  SHORT
 }
