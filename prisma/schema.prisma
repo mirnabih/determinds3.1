@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+  // previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -21,9 +22,28 @@ model Article {
   type ArticleType @default(LONG)
   createdAt DateTime @default(now())
   modifiedAt DateTime @updatedAt
+  comments Comment[]
+  categories Category[]
 }
 
 enum ArticleType {
   LONG
   SHORT
+}
+
+model Comment {
+  id Int @default(autoincrement()) @id
+  text String
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @updatedAt
+  articleId Int
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id Int @default(autoincrement()) @id
+  name String @unique
+  articles Article[]
+  createdAt DateTime @default(now())
+  modifiedAt DateTime @updatedAt
 }

@@ -12,13 +12,21 @@ export class ArticlesService {
     });
   }
 
-  async findAll({ limit, skip }: { limit?: number, skip?: number }) {
-    return this.databaseService.article.findMany({ take: limit ?? undefined, skip: skip ?? undefined, orderBy: { createdAt: 'asc' } });
+  async findAll({ categoryId, limit, skip }: { categoryId?: number, limit?: number, skip?: number }) {
+    const where: Prisma.ArticleWhereInput = {};
+    if(categoryId) {
+      where.categories = { some: { id: categoryId } };
+    }
+    return this.databaseService.article.findMany({ where, take: limit ?? undefined, skip: skip ?? undefined, orderBy: { createdAt: 'asc' } });
   }
 
   async findOne(id: number) {
     return this.databaseService.article.findUnique({
       where: { id },
+      include: {
+        comments: true,
+        categories: true,
+      },
     });
   }
 
@@ -32,6 +40,12 @@ export class ArticlesService {
   async remove(id: number) {
     return this.databaseService.article.delete({
       where: { id },
+    });
+  }
+
+  async removeMany(ids: number[]) {
+    return this.databaseService.article.deleteMany({
+      where: { id: { in: ids } },
     });
   }
 }

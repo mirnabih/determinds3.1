@@ -12,8 +12,8 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll(@Query('limit') limit?: string, @Query('skip') skip?: string) {
-    return this.articlesService.findAll({ limit: limit ? +limit : undefined, skip: skip ? +skip : undefined });
+  findAll(@Query('categoryId') categoryId?: string, @Query('limit') limit?: string, @Query('skip') skip?: string) {
+    return this.articlesService.findAll({ categoryId: categoryId ? +categoryId : undefined, limit: limit ? +limit : undefined, skip: skip ? +skip : undefined });
   }
 
   @Get(':id')
@@ -29,5 +29,10 @@ export class ArticlesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articlesService.remove(+id);
+  }
+
+  @Delete()
+  removeMany(@Body('ids') ids: number[]) {
+    return this.articlesService.removeMany(ids);
   }
 }
